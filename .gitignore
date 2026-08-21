@@ -1,1 +1,13 @@
 .DS_Store
+
+# dependencies
+node_modules
+
+# build output
+dist
+dist-ssr
+*.local
+
+# environment variables (contém a chave da API do crudcrud)
+.env
+.env.*.local
