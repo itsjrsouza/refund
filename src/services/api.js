@@ -40,12 +40,15 @@ export async function deleteExpense(id) {
   return tratarResposta(response, 'Não foi possível remover a despesa.')
 }
 
-export async function updateExpenseStatus(id, status) {
+// O PUT do crudcrud substitui o registro inteiro, não só os campos enviados.
+// Por isso o caller deve mandar o objeto completo da despesa (com o status já
+// alterado) — enviar só { status } apagaria expense/category/amount no crudcrud.
+export async function updateExpense(id, expense) {
   const response = await fetch(`${API_URL}/${RESOURCE}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status }),
+    body: JSON.stringify(expense),
   })
 
-  return tratarResposta(response, 'Não foi possível atualizar o status da despesa.')
+  return tratarResposta(response, 'Não foi possível atualizar a despesa.')
 }

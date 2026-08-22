@@ -15,11 +15,12 @@ Refund is a web application for requesting reimbursement and listing expenses.
 - React
 - Vite
 - JavaScript
+- styled-components
 - Git e Github
 - Figma
 
 ## About the development
-By developing this project, I was able to improve my knowledge and skills in the technologies used, with an emphasis on React (components, props, state, hooks) and integration with a REST API. It was later extended to apply more advanced React patterns: Context API, custom hooks and render memoization.
+By developing this project, I was able to improve my knowledge and skills in the technologies used, with an emphasis on React (components, props, state, hooks) and integration with a REST API. It was later extended to apply more advanced React patterns: Context API, custom hooks, render memoization, and CSS-in-JS with styled-components.
 
 ## Features 💻
 - Responsive layout: adapted to various screen sizes.
@@ -29,12 +30,13 @@ By developing this project, I was able to improve my knowledge and skills in the
 - Remove an expense from the list — the remove control is a proper `<button>` with an accessible name, so it also works from the keyboard, not only by mouse click.
 - Filter expenses by **all / pending / refunded**.
 - Initial expense list loaded through `useEffect`, showing a "Carregando..." message while the request is in flight, while a locally cached copy renders instantly.
-- Expenses persisted through a REST API ([crudcrud.com](https://crudcrud.com)); the current list is also mirrored to `localStorage` as an offline-friendly cache.
+- Expenses persisted through a REST API ([crudcrud.com](https://crudcrud.com)); the current list is also mirrored to `localStorage` as an offline-friendly cache. Status updates send the full expense object on `PUT`, since crudcrud replaces the whole record rather than patching individual fields.
 
 ## Advanced React concepts applied
 - **Context API** (`src/context/ExpensesContext.jsx`): centralizes the expenses list, loading/error state and the active filter, so any component in the tree can read or update it without prop drilling.
 - **Custom hooks**: `useLocalStorage` (`src/hooks/useLocalStorage.js`) encapsulates reading/writing a JSON value to `localStorage`; `useExpenses` (`src/hooks/useExpenses.js`) wraps `useContext` for a clean, guarded way to consume the expenses context.
 - **Memoization**: `ExpenseCard`, `ExpenseList` and `ExpenseFilters` are wrapped in `React.memo`, and the context's action functions (`addExpense`, `removeExpense`, `toggleExpenseStatus`) are defined with `useCallback` so their identity stays stable — avoiding unnecessary re-renders of the list when unrelated state changes. `useMemo` is used to derive the filtered list and the total amount only when the expenses or the filter actually change.
+- **CSS-in-JS with styled-components** (`src/components/ExpenseCard.jsx`): the card that shows a product-like unit (expense name, amount/"price" and an action button) has its styles defined with `styled-components` template literals instead of plain CSS classes, one styled component per visual piece (`CardContainer`, `ProductName`, `Price`, `AddToCartButton`, `RemoveButton`, …). The action button changes color dynamically based on a boolean prop — `$adicionado` (mapped here to the expense's refunded/pending status): `#198754` (green) when `true`, `#6c757d` (gray) when `false`.
 
 ## Project structure
 ```

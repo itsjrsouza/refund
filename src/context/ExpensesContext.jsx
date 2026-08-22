@@ -3,7 +3,7 @@ import {
   createExpense,
   deleteExpense,
   getExpenses,
-  updateExpenseStatus,
+  updateExpense,
 } from '../services/api.js'
 import { useLocalStorage } from '../hooks/useLocalStorage.js'
 
@@ -79,7 +79,10 @@ export function ExpensesProvider({ children }) {
 
       const changed = updated.find((expense) => expense._id === id)
       if (changed) {
-        updateExpenseStatus(id, changed.status).catch((err) => {
+        // Envia o registro completo (menos o _id, que já vai na URL) para não
+        // perder expense/category/amount no PUT do crudcrud.
+        const { _id, ...payload } = changed
+        updateExpense(id, payload).catch((err) => {
           console.error(err)
         })
       }
