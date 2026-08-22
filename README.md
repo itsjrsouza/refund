@@ -15,12 +15,13 @@ Refund is a web application for requesting reimbursement and listing expenses.
 - React
 - Vite
 - JavaScript
+- Recoil
 - styled-components
 - Git e Github
 - Figma
 
 ## About the development
-By developing this project, I was able to improve my knowledge and skills in the technologies used, with an emphasis on React (components, props, state, hooks) and integration with a REST API. It was later extended to apply more advanced React patterns: Context API, custom hooks, render memoization, and CSS-in-JS with styled-components.
+By developing this project, I was able to improve my knowledge and skills in the technologies used, with an emphasis on React (components, props, state, hooks) and integration with a REST API. It was later extended to apply more advanced React patterns: global state management (first with the Context API, then migrated to Recoil), custom hooks, render memoization, and CSS-in-JS with styled-components.
 
 ## Features 💻
 - Responsive layout: adapted to various screen sizes.
@@ -33,18 +34,20 @@ By developing this project, I was able to improve my knowledge and skills in the
 - Expenses persisted through a REST API ([crudcrud.com](https://crudcrud.com)); the current list is also mirrored to `localStorage` as an offline-friendly cache. Status updates send the full expense object on `PUT`, since crudcrud replaces the whole record rather than patching individual fields.
 
 ## Advanced React concepts applied
-- **Context API** (`src/context/ExpensesContext.jsx`): centralizes the expenses list, loading/error state and the active filter, so any component in the tree can read or update it without prop drilling.
-- **Custom hooks**: `useLocalStorage` (`src/hooks/useLocalStorage.js`) encapsulates reading/writing a JSON value to `localStorage`; `useExpenses` (`src/hooks/useExpenses.js`) wraps `useContext` for a clean, guarded way to consume the expenses context.
-- **Memoization**: `ExpenseCard`, `ExpenseList` and `ExpenseFilters` are wrapped in `React.memo`, and the context's action functions (`addExpense`, `removeExpense`, `toggleExpenseStatus`) are defined with `useCallback` so their identity stays stable — avoiding unnecessary re-renders of the list when unrelated state changes. `useMemo` is used to derive the filtered list and the total amount only when the expenses or the filter actually change.
+- **Global state with Recoil** (`src/atoms/`, `src/selectors/`): `RecoilRoot` wraps the app in `App.jsx`; `expensesAtom` holds the expenses list and `filterAtom` holds the active filter (`all` / `pending` / `refunded`). `filteredExpensesSelector` derives the visible list from those two atoms, and `totalAmountSelector` derives the total amount — both recomputed only when their dependencies actually change, which is Recoil's own memoization. Components read state with `useRecoilValue`/`useRecoilState` (`Home.jsx`, `ExpenseFilters` via props) instead of prop drilling. This replaced the earlier Context API implementation.
+- **Custom hook**: `useExpensesActions` (`src/hooks/useExpensesActions.js`) encapsulates the REST calls (`create`/`delete`/`update`) and wires them to the `expensesAtom` setter, keeping `Home.jsx` free of fetch/error-handling logic.
+- **Persistence via Recoil atom effect**: `expensesAtom` uses an `effects` function to read/write the expenses list to `localStorage` automatically — the same idea as a `useLocalStorage` custom hook, but implemented as Recoil's own persistence mechanism.
+- **Memoization**: `ExpenseCard`, `ExpenseList` and `ExpenseFilters` are wrapped in `React.memo`, and the action functions (`addExpense`, `removeExpense`, `toggleExpenseStatus`) are defined with `useCallback` so their identity stays stable — avoiding unnecessary re-renders of the list when unrelated state changes.
 - **CSS-in-JS with styled-components** (`src/components/ExpenseCard.jsx`): the card that shows a product-like unit (expense name, amount/"price" and an action button) has its styles defined with `styled-components` template literals instead of plain CSS classes, one styled component per visual piece (`CardContainer`, `ProductName`, `Price`, `AddToCartButton`, `RemoveButton`, …). The action button changes color dynamically based on a boolean prop — `$adicionado` (mapped here to the expense's refunded/pending status): `#198754` (green) when `true`, `#6c757d` (gray) when `false`.
 
 ## Project structure
 ```
 src/
   assets/       icons and images
+  atoms/        expensesAtom, filterAtom (Recoil global state)
+  selectors/    filteredExpensesSelector, totalAmountSelector (derived Recoil state)
   components/   ExpenseCard, ExpenseForm, ExpenseList, ExpenseFilters
-  context/      ExpensesContext (global state via Context API)
-  hooks/        useLocalStorage, useExpenses (custom hooks)
+  hooks/        useExpensesActions (custom hook)
   data/         expense categories
   pages/        Home
   services/     API integration (crudcrud)
