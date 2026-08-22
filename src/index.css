@@ -275,16 +275,98 @@ aside ul .list-message {
   margin-right: 0.25rem;
 }
 
+.expense-refunded .expense-info strong,
+.expense-refunded .expense-amount {
+  opacity: 0.6;
+}
+
+.status-toggle {
+  border: 1px solid #cdd5d2;
+  border-radius: 999px;
+  background-color: transparent;
+  color: #4d5c57;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 0.25rem 0.6rem;
+  margin: 0 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.status-toggle:hover {
+  border-color: #1f8459;
+  color: #1f8459;
+}
+
+.status-toggle[aria-pressed="true"] {
+  background-color: #1f8459;
+  border-color: #1f8459;
+  color: #ffffff;
+}
+
 .remove-icon {
-  height: 1rem;
+  height: 1.75rem;
+  width: 1.75rem;
   margin-left: 0.5rem;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 0.4rem;
+  background-color: transparent;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.remove-icon img {
+  height: 1rem;
+  pointer-events: none;
 }
 
 .remove-icon:hover {
   opacity: 0.7;
+  background-color: #e4ece9;
+}
+
+.status-toggle:focus-visible,
+.remove-icon:focus-visible,
+.expense-filters button:focus-visible {
+  outline: 2px solid #1f8459;
+  outline-offset: 2px;
+}
+
+.expense-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.expense-filters button {
+  flex: 1;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid #cdd5d2;
+  background-color: transparent;
+  color: #4d5c57;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.expense-filters button:hover {
+  border-color: #1f8459;
+  color: #1f8459;
+}
+
+.expense-filters button.active {
+  background-color: #1f8459;
+  border-color: #1f8459;
+  color: #ffffff;
 }
 
 @media (min-width: 1100px) {

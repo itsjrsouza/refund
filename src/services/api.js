@@ -39,3 +39,13 @@ export async function deleteExpense(id) {
 
   return tratarResposta(response, 'Não foi possível remover a despesa.')
 }
+
+export async function updateExpenseStatus(id, status) {
+  const response = await fetch(`${API_URL}/${RESOURCE}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status }),
+  })
+
+  return tratarResposta(response, 'Não foi possível atualizar o status da despesa.')
+}
