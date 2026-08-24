@@ -27,7 +27,7 @@ By developing this project, I was able to improve my knowledge and skills in the
 - Responsive layout: adapted to various screen sizes.
 - Reusable `ExpenseCard` component, receiving the expense data via props.
 - Controlled form to add new expenses.
-- Mark an expense as **refunded** or **pending** (`status-toggle` button on each card).
+- Mark an expense as **refunded** or **pending** (status button on each card).
 - Remove an expense from the list — the remove control is a proper `<button>` with an accessible name, so it also works from the keyboard, not only by mouse click.
 - Filter expenses by **all / pending / refunded**.
 - Initial expense list loaded through `useEffect`, showing a "Carregando..." message while the request is in flight, while a locally cached copy renders instantly.
@@ -38,7 +38,7 @@ By developing this project, I was able to improve my knowledge and skills in the
 - **Custom hook**: `useExpensesActions` (`src/hooks/useExpensesActions.js`) encapsulates the REST calls (`create`/`delete`/`update`) and wires them to the `expensesAtom` setter, keeping `Home.jsx` free of fetch/error-handling logic.
 - **Persistence via Recoil atom effect**: `expensesAtom` uses an `effects` function to read/write the expenses list to `localStorage` automatically — the same idea as a `useLocalStorage` custom hook, but implemented as Recoil's own persistence mechanism.
 - **Memoization**: `ExpenseCard`, `ExpenseList` and `ExpenseFilters` are wrapped in `React.memo`, and the action functions (`addExpense`, `removeExpense`, `toggleExpenseStatus`) are defined with `useCallback` so their identity stays stable — avoiding unnecessary re-renders of the list when unrelated state changes.
-- **CSS-in-JS with styled-components** (`src/components/ExpenseCard.jsx`): the card that shows a product-like unit (expense name, amount/"price" and an action button) has its styles defined with `styled-components` template literals instead of plain CSS classes, one styled component per visual piece (`CardContainer`, `ProductName`, `Price`, `AddToCartButton`, `RemoveButton`, …). The action button changes color dynamically based on a boolean prop — `$adicionado` (mapped here to the expense's refunded/pending status): `#198754` (green) when `true`, `#6c757d` (gray) when `false`.
+- **CSS-in-JS with styled-components**: styles are defined with `styled-components` template literals, one styled component per visual piece, colocated in the file of the component it belongs to (`App.jsx`, `pages/Home.jsx`, `components/ExpenseForm.jsx`, `components/ExpenseFilters.jsx`, `components/ExpenseCard.jsx`). `src/index.css` was trimmed down to only the font import, CSS reset, `body`/`#root` shell and the typography breakpoint — the rules that are genuinely shared across the whole app, not tied to one component. In `ExpenseCard.jsx`, the status button changes color dynamically based on a boolean prop — `$adicionado` (mapped here to the expense's refunded/pending status): `#198754` (green) when `true`, `#6c757d` (gray) when `false`. In `ExpenseFilters.jsx`, the active filter button is likewise driven by an `$active` boolean prop.
 
 ## Project structure
 ```
